@@ -1,29 +1,23 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GFS — Прогноз TCI</title>
-  <script src="https://cdn.plot.ly/plotly-2.30.0.min.js"></script>
-</head>
-<body>
+<div class="gfs">
 
-<header>
-  <h1>GFS — прогноз TCI</h1>
-  <div class="sub">Иркутская область · туристический климатический индекс по муниципальным образованиям</div>
-</header>
+  <header>
+    <h1>GFS — прогноз TCI</h1>
+    <div class="sub">Иркутская область · туристический климатический индекс по муниципальным образованиям</div>
+  </header>
 
-<div class="run-meta" id="run-meta">Загрузка прогона…</div>
+  <div class="run-meta" id="run-meta">Загрузка прогона…</div>
 
-<div class="map-wrap">
-  <div id="map">
-    <div class="placeholder"><div class="spinner"></div><span>Загрузка карты…</span></div>
+  <div class="map-wrap">
+    <div id="gfs-map">
+      <div class="placeholder"><div class="spinner"></div><span>Загрузка карты…</span></div>
+    </div>
   </div>
-</div>
 
-<div class="days">
-  <div class="label">День прогноза</div>
-  <div class="track" id="track"><span class="loading-text">Загрузка…</span></div>
+  <div class="days">
+    <div class="label">День прогноза</div>
+    <div class="track" id="track"><span class="loading-text">Загрузка…</span></div>
+  </div>
+
 </div>
 
 <script>
@@ -133,7 +127,7 @@
 
     try {
       // newPlot сам очищает контейнер (включая спиннер) и инициализирует карту
-      Plotly.newPlot('map', [trace], layout, {
+      Plotly.newPlot('gfs-map', [trace], layout, {
         responsive: true,
         displayModeBar: false,
       });
@@ -154,7 +148,7 @@
 
   // ── Состояния ──
   function showError(msg) {
-    document.getElementById('map').innerHTML =
+    document.getElementById('gfs-map').innerHTML =
       `<div class="placeholder error">${msg}</div>`;
   }
 
@@ -181,5 +175,3 @@
     return 'неблагоприятно';
   }
 </script>
-</body>
-</html>
