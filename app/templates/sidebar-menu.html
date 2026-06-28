@@ -1,0 +1,56 @@
+<style>
+    .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+        background: #f0f0f0;              /* светло-серый фон */
+        border: 2px solid #555555;        /* тёмно-серый бордер */
+        border-radius: 10px;              /* скругление */
+        width: fit-content;
+    }
+
+    .sidebar-menu .sidebar-btn {
+        width: 200px;                     /* примерно 200px в ширину */
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        background: #9e9e9e;              /* серая — когда не нажата */
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        text-align: center;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .sidebar-menu .sidebar-btn:hover {
+        transform: translateY(-2px);
+        background: #8a8a8a;
+    }
+
+    .sidebar-menu .sidebar-btn.active {
+        background: #4caf50;              /* зелёная — когда нажата */
+    }
+
+    .sidebar-menu .sidebar-btn.active:hover {
+        background: #43a047;
+    }
+</style>
+
+<div class="sidebar-menu" id="sidebar-menu">
+    <button type="button" class="sidebar-btn active" id="src-gfs"
+            onclick="setDataSource('gfs')">Прогноз (GFS)</button>
+    <button type="button" class="sidebar-btn" id="src-era5"
+            onclick="setDataSource('era5')">Реанализ (ERA5)</button>
+</div>
+
+<script>
+    let currentDataSource = 'gfs';
+
+    function setDataSource(source) {
+        currentDataSource = source;
+        document.getElementById('src-gfs').classList.toggle('active', source === 'gfs');
+        document.getElementById('src-era5').classList.toggle('active', source === 'era5');
+    }
+</script>
