@@ -11,8 +11,10 @@ def create_app():
     SIGHTS_PATH = r'tourism-climate\data\Irk_obl_sights.csv'
 
     from .routes import bp, init_data
+    from .gfs_routes import gfs_bp
     init_data(DATA_PATH, GEOJSON_PATH, TCI_RASTER_PATH, UTCI_RASTER_PATH, SIGHTS_PATH)
 
     app.register_blueprint(bp)
+    app.register_blueprint(gfs_bp)
 
     return app

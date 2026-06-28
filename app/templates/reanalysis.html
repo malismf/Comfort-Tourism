@@ -1,45 +1,45 @@
     <div class="container">
         <div class="header">
-            <h1>🌡️ Климатические индексы Иркутской области</h1>
+            <h1>Климатические индексы Иркутской области</h1>
             <p>Анализ туристического и теплового комфорта | 2004-2024 гг.</p>
         </div>
 
         <div class="toggle-buttons">
-            <div class="toggle-btn" id="btn-tci" onclick="setIndex('tci')">🌿 TCI (Туристический комфорт)</div>
-            <div class="toggle-btn" id="btn-utci" onclick="setIndex('utci')">🔥 UTCI (Тепловой комфорт)</div>
-            <div class="toggle-btn" id="btn-tourism" onclick="setIndex('tourism')">🏛️ Туристические объекты</div>
-            <div class="toggle-btn recommend-mode-btn" id="btn-recommend" onclick="setIndex('recommend')">🏆 Куда поехать?</div>
+            <div class="toggle-btn" id="btn-tci" onclick="setIndex('tci')">TCI (Туристический комфорт)</div>
+            <div class="toggle-btn" id="btn-utci" onclick="setIndex('utci')">UTCI (Тепловой комфорт)</div>
+            <div class="toggle-btn" id="btn-tourism" onclick="setIndex('tourism')">Туристические объекты</div>
+            <div class="toggle-btn recommend-mode-btn" id="btn-recommend" onclick="setIndex('recommend')">Куда поехать?</div>
         </div>
 
         <div class="mode-buttons" id="mode-buttons">
-            <div class="mode-btn" id="btn-actual" onclick="setMode('actual')">📅 Фактические данные</div>
-            <div class="mode-btn" id="btn-period" onclick="setMode('period')">📊 За последние годы</div>
-            <div class="mode-btn" id="btn-avg" onclick="setMode('avg')">📈 Средние многолетние</div>
+            <div class="mode-btn" id="btn-actual" onclick="setMode('actual')">Фактические данные</div>
+            <div class="mode-btn" id="btn-period" onclick="setMode('period')">За последние годы</div>
+            <div class="mode-btn" id="btn-avg" onclick="setMode('avg')">Средние многолетние</div>
         </div>
 
         <!-- Панель рекомендаций -->
-        <div id="recommendations_panel" class="recommendations-panel" style="display: none;">
+        <div id="recommendations_panel" class="recommendations-panel">
             <div class="recommendations-title">
-                🏆 Куда поехать?
-                <span id="recommend_month_name" style="font-size: 13px; color: #666;"></span>
-                <span id="recommend_period_text" style="font-size: 12px; color: #999; margin-left: 10px;"></span>
+                 Куда поехать?
+                <span id="recommend_month_name"></span>
+                <span id="recommend_period_text"></span>
             </div>
 
-            <div class="mode-buttons" style="margin-bottom: 15px;">
-                <div class="mode-btn" id="rec_type_comfort" onclick="setRecType('comfort')" style="background:#2ecc71;">🌡️ КОМФОРТНЫЙ ОТДЫХ</div>
-                <div class="mode-btn" id="rec_type_seasonal" onclick="setRecType('seasonal')">🎯 СЕЗОННЫЙ ОТДЫХ</div>
+            <div class="mode-buttons recommendations-toggle-buttons">
+                <div class="mode-btn" id="rec_type_comfort" onclick="setRecType('comfort')">КОМФОРТНЫЙ ОТДЫХ</div>
+                <div class="mode-btn" id="rec_type_seasonal" onclick="setRecType('seasonal')">СЕЗОННЫЙ ОТДЫХ</div>
             </div>
 
             <!-- ВЫБОР СЕЗОНА (показывается только при СЕЗОННЫЙ ОТДЫХ) -->
-            <div id="season_select_container" class="mode-buttons" style="margin-bottom: 15px; display: none;">
-                <div class="mode-btn" id="season_winter" onclick="setSeason('winter')">❄️ Зимний</div>
-                <div class="mode-btn" id="season_summer" onclick="setSeason('summer')">☀️ Летний</div>
-                <div class="mode-btn" id="season_year" onclick="setSeason('year')">🏛️ Круглогодичный</div>
+            <div id="season_select_container" class="mode-buttons season-select-container">
+                <div class="mode-btn" id="season_winter" onclick="setSeason('winter')">Зимний</div>
+                <div class="mode-btn" id="season_summer" onclick="setSeason('summer')">Летний</div>
+                <div class="mode-btn" id="season_year" onclick="setSeason('year')">Круглогодичный</div>
             </div>
 
-            <div class="controls" style="background: transparent; padding: 0 0 10px 0; box-shadow: none;">
+            <div class="controls recommendations-controls">
                 <div class="control-group">
-                    <label>📆 Месяц</label>
+                    <label>Месяц</label>
                     <select id="recommend_month">
                         <option value="1">Январь</option>
                         <option value="2">Февраль</option>
@@ -56,7 +56,7 @@
                     </select>
                 </div>
                 <div class="control-group">
-                    <label>📊 Период</label>
+                    <label>Период</label>
                     <select id="recommend_period">
                         <option value="10" selected>Последние 10 лет</option>
                         <option value="5">Последние 5 лет</option>
@@ -64,7 +64,7 @@
                         <option value="avg">Средние многолетние</option>
                     </select>
                 </div>
-                <button onclick="updateRecommendations()">🔍 Показать лучшие районы</button>
+                <button onclick="updateRecommendations()">Показать лучшие районы</button>
             </div>
             <div id="recommendations_list" class="recommendations-list">
                 <!-- Список рекомендаций  -->
@@ -73,11 +73,11 @@
 
         <div class="controls" id="climate-controls">
             <div class="control-group" id="year-group">
-                <label>📅 Год</label>
+                <label>Год</label>
                 <input type="number" id="year" value="2024" min="2004" max="2024" step="1">
             </div>
-            <div class="control-group" id="period-group" style="display: none;">
-                <label>📊 Количество лет</label>
+            <div class="control-group" id="period-group">
+                <label>Количество лет</label>
                 <select id="period_years">
                     <option value="1">Последний год</option>
                     <option value="2">Последние 2 года</option>
@@ -90,38 +90,38 @@
                 </select>
             </div>
             <div class="control-group">
-                <label>📆 Месяц</label>
+                <label>Месяц</label>
                 <input type="number" id="month" min="1" max="12" value="7">
             </div>
-            <button onclick="updateMap()">🔄 Обновить карту</button>
+            <button onclick="updateMap()">Обновить карту</button>
         </div>
 
-        <div class="controls" id="tourism-controls" style="display: none;">
+        <div class="controls" id="tourism-controls">
             <div class="control-group">
-                <label>📆 Месяц (для TCI)</label>
+                <label>Месяц (для TCI)</label>
                 <input type="number" id="tourism_month" min="1" max="12" value="7">
             </div>
             <div class="control-group">
-                <label>🏷️ Тип туризма</label>
+                <label>Тип туризма</label>
                 <select id="sights_category">
                     <option value="Все">Загрузка...</option>
                 </select>
             </div>
-            <button onclick="updateTourismMap()">🔄 Показать объекты</button>
-            <button onclick="showDistrictsAnalysis()" style="background:#3498db;">📊 Районы Иркутской области</button>
+            <button onclick="updateTourismMap()">Показать объекты</button>
+            <button class="blue-btn" onclick="showDistrictsAnalysis()">Районы Иркутской области</button>
         </div>
 
         <div class="card">
-            <h3 id="map-title">🗺️ Карта климатического индекса</h3>
+            <h3 id="map-title">Карта климатического индекса</h3>
             <div id="map"></div>
             <div class="legend" id="legend"></div>
             <div class="selected-info" id="selected-info">
-                💡 Нажмите на любой район, чтобы увидеть подробную информацию
+                Нажмите на любой район, чтобы увидеть подробную информацию
             </div>
         </div>
 
         <div class="info-panel" id="info-panel">
-            <h3>📊 Детальная информация о районе</h3>
+            <h3>Детальная информация о районе</h3>
             <div class="info-content" id="info-content"></div>
             <div id="graph"></div>
         </div>
@@ -148,12 +148,12 @@
     <div id="districtsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="districtsTitle">📊 Районы Иркутской области</h3>
+                <h3 id="districtsTitle">Районы Иркутской области</h3>
                 <button class="close-btn" onclick="closeDistrictsModal()">✕ Закрыть</button>
             </div>
             <div id="districtsContent"></div>
-            <div id="districtsInfo" style="margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 10px; text-align: center; font-size: 13px;">
-                💡 Кликните на район, чтобы показать его достопримечательности на карте
+            <div id="districtsInfo">
+                Кликните на район, чтобы показать его достопримечательности на карте
             </div>
         </div>
     </div>
@@ -236,7 +236,7 @@
                 tourismControls.style.display = 'flex';
                 modeButtons.style.display = 'none';
                 recommendationsPanel.style.display = 'none';
-                mapTitle.innerHTML = '🗺️ Туристические объекты Иркутской области';
+                mapTitle.innerHTML = 'Туристические объекты Иркутской области';
                 selectedDistrict = null;
                 updateTourismMap();
             } else if (idx === 'recommend') {
@@ -244,14 +244,14 @@
                 tourismControls.style.display = 'none';
                 modeButtons.style.display = 'none';
                 recommendationsPanel.style.display = 'block';
-                mapTitle.innerHTML = '🏆 Рекомендации: лучшие районы для отдыха';
+                mapTitle.innerHTML = 'Рекомендации: лучшие районы для отдыха';
                 updateRecommendations();
             } else {
                 climateControls.style.display = 'flex';
                 tourismControls.style.display = 'none';
                 modeButtons.style.display = 'flex';
                 recommendationsPanel.style.display = 'none';
-                mapTitle.innerHTML = '🗺️ Карта климатического индекса';
+                mapTitle.innerHTML = 'Карта климатического индекса';
                 updateMap();
             }
         }
