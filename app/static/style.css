@@ -12,6 +12,22 @@ body {
     padding: 20px;
 }
 
+
+/* === Раскладка: левая + правая панель === */
+.app {
+    display: flex;
+    flex-direction: row;   /* флекс по строке */
+    gap: 20px;
+    align-items: flex-start;
+}
+.left-panel {
+    flex: 0 0 auto;        /* по ширине содержимого (sidebar-menu) */
+}
+.right-panel {
+    flex: 1;               /* занимает всё оставшееся место */
+    min-width: 0;          /* чтобы карта/Plotly не распирали колонку */
+}
+
 .container {
     max-width: 1400px;
     margin: 0 auto;

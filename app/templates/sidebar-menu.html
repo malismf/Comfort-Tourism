@@ -40,17 +40,30 @@
 
 <div class="sidebar-menu" id="sidebar-menu">
     <button type="button" class="sidebar-btn active" id="src-gfs"
-            onclick="setDataSource('gfs')">Прогноз (GFS)</button>
+            onclick="setDataSource('forecast.html')">Прогноз (GFS)</button>
     <button type="button" class="sidebar-btn" id="src-era5"
-            onclick="setDataSource('era5')">Реанализ (ERA5)</button>
+            onclick="setDataSource('reanalysis.html')">Реанализ (ERA5)</button>
 </div>
 
 <script>
-    let currentDataSource = 'gfs';
+    let currentDataSource = 'forecast.html';
 
-    function setDataSource(source) {
-        currentDataSource = source;
-        document.getElementById('src-gfs').classList.toggle('active', source === 'gfs');
-        document.getElementById('src-era5').classList.toggle('active', source === 'era5');
+    const CONTAINERS = {
+        'forecast.html':   { panel: 'module-forecast',   button: 'src-gfs'  },
+        'reanalysis.html': { panel: 'module-reanalysis', button: 'src-era5' }
+    };
+
+    function setDataSource(file) {
+        currentDataSource = file;
+        for (const [name, m] of Object.entries(CONTAINERS)) {
+            const isActive = (name === file);
+
+            const panel = document.getElementById(m.panel);
+            if (panel) panel.style.display = isActive ? '' : 'none';
+
+            const button = document.getElementById(m.button);
+            if (button) button.classList.toggle('active', isActive);
+
+        }
     }
 </script>
