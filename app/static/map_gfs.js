@@ -1,3 +1,6 @@
+export const MapModule = {
+  drawChoropleth: function(options) {
+    const {
       containerId,
       geojson,
       data,
