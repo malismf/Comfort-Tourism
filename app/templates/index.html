@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Климатические индексы Иркутской области</title>
     <script src="https://cdn.plot.ly/plotly-2.27.1.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='sidebar-menu.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='reanalysis.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='forecast.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='run_meta.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sidebar-menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reanalysis.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/forecast.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/run_meta.css') }}">
 </head>
 <body>
     <div class="app">
@@ -28,11 +28,11 @@
             </div>
         </div>
     </div>
-    <script type="module" src="{{ url_for('static', filename='map_gfs.js') }}"></script>   
-    <script type="module" src="{{ url_for('static', filename='run_meta.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='sidebar-menu.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='forecast.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='forecast_hci.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='reanalysis.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/map_gfs.js') }}"></script>   
+    <script type="module" src="{{ url_for('static', filename='js/run_meta.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/sidebar-menu.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/forecast.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/forecast_hci.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='js/reanalysis.js') }}"></script>
 </body>
 </html>
