@@ -5,7 +5,8 @@
     <div class="sub">Иркутская область · индекс климатического комфорта по муниципальным образованиям</div>
   </header>
 
-  <div class="run-meta" id="run-meta-hci">Загрузка прогона…</div>
+{% set meta_id = 'run-meta-hci' %}
+{% include 'run_meta.html' %}
 
   <div class="map-wrap">
     <div id="map-hci">
@@ -18,4 +19,4 @@
     <div class="track" id="track-hci"><span class="loading-text">Загрузка…</span></div>
   </div>
 
-</div>
+
