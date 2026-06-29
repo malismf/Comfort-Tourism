@@ -8,11 +8,8 @@
 {% set meta_id = 'run-meta-hci' %}
 {% include 'run_meta.html' %}
 
-  <div class="map-wrap">
-    <div id="map-hci">
-      <div class="placeholder"><div class="spinner"></div><span>Загрузка карты…</span></div>
-    </div>
-  </div>
+{% set map_id = 'map-hci' %}
+{% include 'map_gfs.html' %}
 
   <div class="days">
     <div class="label">День прогноза</div>

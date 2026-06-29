@@ -28,10 +28,11 @@
             </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='run_meta.js') }}"></script>
-    <script src="{{ url_for('static', filename='sidebar-menu.js') }}"></script>
-    <script src="{{ url_for('static', filename='forecast.js') }}"></script>
-    <script src="{{ url_for('static', filename='forecast_hci.js') }}"></script>
-    <script src="{{ url_for('static', filename='reanalysis.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='map_gfs.js') }}"></script>   
+    <script type="module" src="{{ url_for('static', filename='run_meta.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='sidebar-menu.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='forecast.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='forecast_hci.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='reanalysis.js') }}"></script>
 </body>
 </html>

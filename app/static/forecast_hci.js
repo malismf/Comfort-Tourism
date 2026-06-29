@@ -1,3 +1,5 @@
+import { MapModule } from './map_gfs.js';
+
 let geojsonHci    = null;
 let availDaysHci  = [];
 let currentDayHci = null;
@@ -67,45 +69,17 @@ async function loadMapHci(forecastDay) {
 }
 
 function drawMapHci(data, forecastDay) {
-  const trace = {
-    type:         'choroplethmapbox',
-    geojson:      geojsonHci,
-    featureidkey: 'properties.name',
-    locations:    data.map(d => d.name),
-    z:            data.map(d => d.hci ?? null),
-    customdata:   data.map(d => [d.name, d.hci, d.date_local, hciLabel(d.hci)]),
-    colorscale:   'RdYlGn',
-    zmin: 0, zmax: 100,
-    marker:   { opacity: 0.85, line: { width: 0.6, color: 'rgba(0,0,0,0.25)' } },
-    colorbar: {
-      title:       { text: 'HCI', font: { color: '#52525b', size: 12 } },
-      tickfont:    { color: '#52525b', size: 11 },
-      thickness:   12,
-      len:         0.7,
-      outlinewidth: 0,
-      ticks:       'outside',
-      ticklen:     3,
-    },
-    hovertemplate:
-      '<b>%{customdata[0]}</b><br>' +
-      'HCI: %{customdata[1]:.1f} — %{customdata[3]}<br>' +
-      'Дата: %{customdata[2]}<extra></extra>',
-  };
-
-  const layout = {
-    mapbox: { style: 'carto-positron', zoom: 5.0, center: { lat: 57.0, lon: 105.0 } },
-    height: 560,
-    margin: { r: 0, t: 0, l: 0, b: 0 },
-    paper_bgcolor: 'rgba(0,0,0,0)',
-    font: { family: '-apple-system, system-ui, sans-serif' },
-  };
-
   try {
-    Plotly.react('map-hci', [trace], layout, {
-      displayModeBar: false,
+    MapModule.drawChoropleth({
+      containerId: 'map-hci',
+      geojson: geojsonHci,
+      data: data,
+      valueKey: 'hci',
+      labelFn: hciLabel,
+      colorbarTitle: 'HCI'
     });
   } catch (e) {
-    showErrorHci('Ошибка отрисовки: ' + e.message);
+    showErrorHci(e.message);
   }
 }
 
