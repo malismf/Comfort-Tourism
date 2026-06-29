@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='sidebar-menu.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='reanalysis.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='forecast.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='forecast_hci.css') }}">
 </head>
 <body>
     <div class="app">
@@ -28,5 +27,9 @@
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='sidebar-menu.js') }}"></script>
+    <script src="{{ url_for('static', filename='forecast.js') }}"></script>
+    <script src="{{ url_for('static', filename='forecast_hci.js') }}"></script>
+    <script src="{{ url_for('static', filename='reanalysis.js') }}"></script>
 </body>
 </html>

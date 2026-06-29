@@ -53,7 +53,8 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
-.gfs #gfs-map {
+.gfs #gfs-map,
+.gfs #map-hci {
     height: 560px;
     border-radius: 10px;
     overflow: hidden;
@@ -174,5 +175,6 @@
 @media (max-width: 600px) {
     .gfs header h1 { font-size: 1.6em; }
     .gfs #gfs-map,
+    .gfs #map-hci,
     .gfs .placeholder { height: 420px; }
 }

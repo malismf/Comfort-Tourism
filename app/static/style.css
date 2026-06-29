@@ -28,8 +28,8 @@ body {
     min-width: 0;          /* чтобы карта/Plotly не распирали колонку */
 }
 
-/* === Дефолтная кнопка (используется модулями) === */
-button {
+/* === Дефолтная кнопка (панели управления реанализа) === */
+.controls button {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
@@ -41,6 +41,6 @@ button {
     transition: transform 0.2s;
 }
 
-button:hover {
+.controls button:hover {
     transform: translateY(-2px);
 }
