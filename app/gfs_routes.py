@@ -104,3 +104,75 @@ def api_gfs_tci():
     except Exception as e:
         traceback.print_exc()
         return jsonify({"error": str(e), "data": []}), 500
+    
+
+@ gfs_bp.route("/api/gfs/hci")
+def api_gfs_hci():
+    """
+    Возвращает HCI по всем МО для последнего прогона и заданного дня.
+    ?forecast_day=0
+
+    Ответ:
+    {
+      "run_id": 8,
+      "run_date": "2026-06-26",
+      "cycle": 0,
+      "forecast_day": 0,
+      "data": [{"mo_id": 1, "name": "Аларский", "hci": 94.0, "date_local": "2026-06-26"}, ...]
+    }
+    """
+    forecast_day = request.args.get("forecast_day", 0, type=int)
+    try:
+        with get_connection() as conn:
+            with conn.cursor() as cur:
+                # Один запрос: последний run_id + join с mo_boundary + join с forecast_run
+                cur.execute("""
+                    SELECT  h.mo_id,
+                            m.name,
+                            h.hci,
+                            h.date_local::text,
+                            h.run_id,
+                            fr.run_date::text,
+                            fr.cycle
+                    FROM    hci_mo_daily    h
+                    JOIN    mo_boundary     m  ON h.mo_id   = m.id
+                    JOIN    forecast_run    fr ON h.run_id  = fr.id
+                    WHERE   h.run_id = (SELECT MAX(run_id) FROM hci_mo_daily)
+                      AND   h.forecast_day = %s
+                    ORDER   BY h.mo_id
+                """, (forecast_day,))
+                rows = cur.fetchall()
+
+        if not rows:
+            return jsonify({
+                "run_id": None, "run_date": None, "cycle": None,
+                "forecast_day": forecast_day, "data": []
+            })
+
+        # Первый ряд содержит метаданные прогона (одинаковы для всех строк)
+        run_id    = rows[0][4]
+        run_date  = rows[0][5]
+        cycle     = rows[0][6]
+
+        data = [
+            {
+                "mo_id":      r[0],
+                "name":       r[1],
+                "hci":        round(float(r[2]), 1) if r[2] is not None else None,
+                "date_local": r[3],
+            }
+            for r in rows
+        ]
+
+        return jsonify({
+            "run_id":       run_id,
+            "run_date":     run_date,
+            "cycle":       cycle,
+            "forecast_day": forecast_day,
+            "data":         data,
+        })
+    
+    except Exception as e:
+        traceback.print_exc()
+        return jsonify({"error": str(e), "data": []}), 500
+    

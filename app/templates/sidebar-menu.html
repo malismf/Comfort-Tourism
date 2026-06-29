@@ -1,6 +1,8 @@
 <div class="sidebar-menu" id="sidebar-menu">
     <button type="button" class="sidebar-btn active" id="src-gfs"
-            onclick="setDataSource('forecast.html')">Прогноз (GFS)</button>
+            onclick="setDataSource('forecast.html')">Прогноз TCI (GFS)</button>
+    <button type="button" class="sidebar-btn" id="src-hci"
+            onclick="setDataSource('forecast_hci.html')">Прогноз HCI (GFS)</button>
     <button type="button" class="sidebar-btn" id="src-era5"
             onclick="setDataSource('reanalysis.html')">Реанализ (ERA5)</button>
 </div>
@@ -10,6 +12,7 @@
 
     const CONTAINERS = {
         'forecast.html':   { panel: 'module-forecast',   button: 'src-gfs'  },
+        'forecast_hci.html': { panel: 'module-forecast-hci', button: 'src-hci' },
         'reanalysis.html': { panel: 'module-reanalysis', button: 'src-era5' }
     };
 
