@@ -1,3 +1,5 @@
+import { selectMo } from "./linear_gfs.js";
+
 const colors = [
   [0.0, '#ff0000'],   // <40   Очень плохо / Неблагоприятно
   [0.5, '#ff9900'],  // 40-49 Плохо / Нежелательно
@@ -24,8 +26,7 @@ export const MapModule = {
     const el = document.getElementById(containerId);
     if (!el) throw new Error('Контейнер не найден');
 
-    // Обязательно вручную очищаем спиннер перед инициализацией Plotly,
-    // чтобы он гарантированно не зависал при скрытом контейнере
+      
     if (!el.classList.contains('js-plotly-plot')) {
       el.innerHTML = '';
     }
@@ -69,6 +70,19 @@ export const MapModule = {
       // Убрали responsive: true, чтобы Mapbox не зависал в скрытой вкладке (display: none)
       Plotly.react(containerId, [trace], layout, { displayModeBar: false });
       this.initResizeObserver(containerId);
+
+      el.on('plotly_click', function(clickData) {
+      if (clickData.points && clickData.points[0] && clickData.points[0].location) {
+          const moName = clickData.points[0].location;
+          if (containerId == 'map-hci') {
+            selectMo(moName, 'linear-hci');
+          }
+          else {
+            selectMo(moName, 'linear-gfs');
+          }
+        }
+      });
+
     } catch (e) {
       throw new Error('Ошибка отрисовки Plotly: ' + e.message);
     }

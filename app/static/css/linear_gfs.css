@@ -1,0 +1,57 @@
+/* ── Панель выбора МО ── */
+.gfs .linear-controls {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 16px 18px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.gfs .linear-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #64748b;
+}
+
+.gfs .linear-select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    max-width: 360px;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.gfs .linear-select:hover {
+    border-color: #cbd5e1;
+}
+
+.gfs .linear-select:focus {
+    outline: none;
+    border-color: #4caf50;                 /* зелёный GFS */
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+/* ── Контейнер графика ── */
+.gfs .linear-chart {
+    height: 560px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* ── Узкие экраны ── */
+@media (max-width: 600px) {
+    .gfs .linear-chart,
+    .gfs .placeholder { height: 420px; }
+}
