@@ -1,3 +1,12 @@
+const colors = [
+  [0.0, '#ff0000'],   // <40   Очень плохо / Неблагоприятно
+  [0.5, '#ff9900'],  // 40-49 Плохо / Нежелательно
+  [0.6, '#ffcc00'],  // 50-59 Удовлетворительно / Приемлемо
+  [0.7, '#ffff00'],  // 60-69 Хорошо
+  [0.8, '#44aa44'],  // 70-79 Очень хорошо
+  [1.0, '#006837'],  // ≥80   Отлично
+];
+
 export const MapModule = {
   drawChoropleth: function(options) {
     const {
@@ -6,7 +15,7 @@ export const MapModule = {
       data,
       valueKey,
       labelFn,
-      colorscale = 'RdYlGn',
+      colorscale = colors,
       zmin = 0,
       zmax = 100,
       colorbarTitle = ''

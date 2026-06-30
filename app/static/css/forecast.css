@@ -60,6 +60,14 @@
     overflow: hidden;
 }
 
+.map-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
 /* ── Состояния загрузки / ошибки ── */
 .gfs .placeholder {
     height: 560px;
