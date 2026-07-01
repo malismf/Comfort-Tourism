@@ -38,6 +38,13 @@ export function selectMo(moName, linearId = 'linear-gfs') {
   const mo = seriesData.find(m => m.name === moName);
   if (!mo) return showErrorLinear('МО не найдено', linearId);
   drawChart(mo, linearId);
+  addChartTitle(mo, linearId);
+}
+
+function addChartTitle(mo, linearId) {
+  const container = document.getElementById(linearId);
+  const titleEl = container.parentElement.querySelector('.linear-title');
+  titleEl.innerHTML = `<span class="mo-name">${mo.name}</span>`;
 }
 
 function drawChart(mo, linearId) {
