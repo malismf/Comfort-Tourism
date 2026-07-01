@@ -16,18 +16,20 @@
   // [min, color]
   const COLORS = {
     tci: {
-      cid: [],
-      cia: [],
-      r:   [],
-      s:   [],
-      w:   [],
+      cid: [[5, '#4caf50'], [4, '#8bc34a'], [3, '#ffeb3b'], [2, '#ff9800'], [1, '#ff5722'], [0, '#f44336'], [-1, '#e53935'], [-2, '#d32f2f'], [-3, '#b71c1c']],
+      cia: [[5, '#4caf50'], [4, '#8bc34a'], [3, '#ffeb3b'], [2, '#ff9800'], [1, '#ff5722'], [0, '#f44336'], [-1, '#e53935'], [-2, '#d32f2f'], [-3, '#b71c1c']],
+      r:   [[5, '#4caf50'], [4, '#8bc34a'], [3, '#ffeb3b'], [2, '#ff9800'], [1, '#ff5722'], [0, '#f44336'], [-1, '#e53935']],
+      s:   [[5, '#4caf50'], [4, '#8bc34a'], [3, '#ffeb3b'], [2, '#ff9800'], [1, '#ff5722'], [0, '#f44336'], [-1, '#e53935']],
+      w:   [[5, '#4caf50'], [4, '#8bc34a'], [3, '#ffeb3b'], [2, '#ff9800'], [1, '#ff5722'], [0, '#f44336'], [-1, '#e53935']],
+      index: [[80, '#006837'], [70, '#44aa44'], [60, '#ffff00'], [50, '#ffcc00'], [40, '#ff9900'], [0, '#ff0000']],
     },
     hci: {
-      et: [],
-      tc: [],
-      a:  [],
-      r:  [],
-      w:  [],
+      et: [[40, '#f44336'], [36, '#ff5722'], [34, '#ff9800'], [32, '#ffeb3b'], [28, '#8bc34a'], [19, '#4caf50'], [14, '#8bc34a'], [10, '#ffeb3b'], [-1, '#ff9800'], [-Infinity, '#ff5722']],
+      tc: [[8, '#4caf50'], [6, '#8bc34a'], [5, '#ffeb3b'], [3, '#ff9800'], [1, '#ff5722'], [0, '#f44336']],
+      r:  [[10, '#4caf50'], [9, '#8bc34a'], [8, '#ffeb3b'], [5, '#ff9800'], [2, '#ff5722'], [0, '#f44336'], [-1, '#e53935']],
+      w:  [[10, '#4caf50'], [9, '#8bc34a'], [8, '#ffeb3b'], [6, '#ff9800'], [3, '#ff5722'], [0, '#f44336'], [-10, '#b71c1c']],
+      a:  [[9, '#4caf50'], [7, '#8bc34a'], [6, '#ffeb3b'], [4, '#ff9800'], [2, '#ff5722']],
+      index: [[80, '#006837'], [70, '#44aa44'], [60, '#ffff00'], [50, '#ffcc00'], [40, '#ff9900'], [0, '#ff0000']],
     },
   };
 
@@ -35,11 +37,10 @@
 
   function colorFor(value, scale) {
     if (value === null || value === undefined || !scale || !scale.length) return NEUTRAL;
-    let color = NEUTRAL;
     for (const [min, c] of scale) {
-      if (value >= min) color = c; else break;
+      if (value >= min) return c;
     }
-    return color;
+    return NEUTRAL;
   }
 
   const TCI_FIELDS = [['cid', 'CID'], ['cia', 'CIA'], ['r', 'R'], ['s', 'S'], ['w', 'W']];
@@ -61,7 +62,6 @@
         <span class="vc-value">${fmt(indexVal)}</span>
         <span class="vc-dot" style="background:${colorFor(indexVal, COLORS[group].index)}"></span>
       </div>`;
-    ;
   }
 
   function render(el, moName, entry, isHci) {
