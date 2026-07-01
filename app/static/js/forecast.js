@@ -65,15 +65,16 @@ async function loadMap(forecastDay) {
   if (!res.data || !res.data.length) {
     return showError(`Нет данных для дня +${forecastDay}`);
   }
-  drawMap(res.data);
+  drawMap(res.data, forecastDay);
 }
 
-function drawMap(data) {
+function drawMap(data, forecastDay) {
   try {
     MapModule.drawChoropleth({
       containerId: 'gfs-map',
       geojson: geojson,
       data: data,
+      day: forecastDay,
       valueKey: 'tci',
       labelFn: tciLabel,
       colorbarTitle: 'TCI'

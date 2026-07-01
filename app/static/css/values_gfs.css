@@ -1,0 +1,103 @@
+.values-panel {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 16px 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Состояния ── */
+.values-panel .values-empty,
+.values-panel .values-error,
+.values-panel .values-loading {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  font-size: 14px;
+  color: #94a3b8;
+  padding: 10px 6px;
+}
+.values-panel .values-error { color: #e74c3c; font-weight: 600; }
+
+.values-panel .values-spin {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #4caf50;
+  border-radius: 50%;
+  animation: values-spin 0.8s linear infinite;
+}
+@keyframes values-spin { to { transform: rotate(360deg); } }
+
+/* ── Шапка ── */
+.values-panel .values-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.values-panel .values-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+}
+.values-panel .values-mo {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.values-panel .values-day {
+  margin-left: auto;
+  font-size: 12px;
+  color: #94a3b8;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* ── Ячейки сабиндексов ── */
+.values-panel .values-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.values-panel .value-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 140px;
+  min-width: 120px;
+  padding: 9px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.values-panel .vc-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: rgb(49, 49, 49);
+}
+.values-panel .vc-value {
+  margin-left: auto;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1e293b;
+}
+.values-panel .vc-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+  .values-panel .value-cell { min-width: 110px; flex-basis: 110px; }
+}

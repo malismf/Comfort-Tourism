@@ -74,6 +74,7 @@ function drawMapHci(data, forecastDay) {
       containerId: 'map-hci',
       geojson: geojsonHci,
       data: data,
+      day: forecastDay,
       valueKey: 'hci',
       labelFn: hciLabel,
       colorbarTitle: 'HCI'

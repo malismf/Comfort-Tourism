@@ -9,12 +9,15 @@ const colors = [
   [1.0, '#006837'],  // ≥80   Отлично
 ];
 
+const stateByContainer = {};
+
 export const MapModule = {
   drawChoropleth: function(options) {
     const {
       containerId,
       geojson,
       data,
+      day = null,
       valueKey,
       labelFn,
       colorscale = colors,
@@ -30,6 +33,8 @@ export const MapModule = {
     if (!el.classList.contains('js-plotly-plot')) {
       el.innerHTML = '';
     }
+
+    stateByContainer[containerId] = { data, day };
 
     const trace = {
       type: 'choroplethmapbox',
@@ -76,9 +81,11 @@ export const MapModule = {
           const moName = clickData.points[0].location;
           if (containerId == 'map-hci') {
             selectMo(moName, 'linear-hci');
+            selectMoValues(moName, 'values-hci', stateByContainer[containerId].day);
           }
           else {
             selectMo(moName, 'linear-gfs');
+            selectMoValues(moName, 'values-gfs', stateByContainer[containerId].day);  
           }
         }
       });
