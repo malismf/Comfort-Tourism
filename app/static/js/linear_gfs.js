@@ -27,6 +27,7 @@ const COLOR_HCI = '#2563eb';   // синий   — HCI
     }
 
     // По умолчанию район не выбираем — ждём клик по МО на карте
+    LINEAR_TARGETS.forEach(id => promptLinear(id));
   } catch (e) {
     LINEAR_TARGETS.forEach(id => showErrorLinear('Сетевая ошибка: ' + e.message, id));
   }
