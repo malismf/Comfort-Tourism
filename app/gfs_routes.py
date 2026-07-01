@@ -180,42 +180,66 @@ def api_gfs_hci():
 @gfs_bp.route("/api/gfs/series")
 def api_gfs_series():
     """
-    Возвращает TCI и HCI по всем МО за ВСЕ дни прогноза (последний прогон).
-    Используется для линейного графика хода индексов по дням.
+    Возвращает TCI и HCI (со всеми субиндексами) для ОДНОГО МО
+    за все дни прогноза (последний прогон). Для линейного графика.
+
+    Параметр:
+        ?mo=<название МО>      (например: ?mo=Аларский)
 
     Ответ:
     {
       "run_id": 8,
       "run_date": "2026-06-26",
       "cycle": 0,
+      "mo_id": 1,
+      "name": "Аларский",
       "days": [{"day": 0, "date": "2026-06-26"}, {"day": 1, "date": "2026-06-27"}, ...],
-      "data": [
+      "series": [
         {
-          "mo_id": 1,
-          "name": "Аларский",
-          "series": [
-            {"forecast_day": 0, "date_local": "2026-06-26", "tci": 94.0, "hci": 88.0},
-            {"forecast_day": 1, "date_local": "2026-06-27", "tci": 90.0, "hci": 85.0},
-            ...
-          ]
+          "forecast_day": 0,
+          "date_local": "2026-06-26",
+          "tci": 94.0,
+          "hci": 88.0,
+          "tci_parts": {"cid": 90.0, "cia": 85.0, "r": 100.0, "s": 80.0, "w": 60.0},
+          "hci_parts": {"et": 9.0,  "tc": 10.0, "a": 5.0,  "r": 6.0,  "w": 1.0}
         },
         ...
       ]
     }
     """
+    mo = request.args.get("mo", type=str)
+
+    empty = {
+        "run_id": None, "run_date": None, "cycle": None,
+        "mo_id": None, "name": mo, "days": [], "series": []
+    }
+    if not mo:
+        return jsonify(empty)
+
     try:
         with get_connection() as conn:
             with conn.cursor() as cur:
                 # Якорь — последний run_id из tci_mo_daily (как и в /api/gfs/days).
                 # HCI подтягивается LEFT JOIN по (run_id, mo_id, forecast_day),
                 # чтобы строка сохранялась даже при отсутствии HCI на день.
+                # Субиндексы r и w есть в обеих таблицах — разводим по алиасам.
                 cur.execute("""
                     SELECT  t.mo_id,
                             m.name,
                             t.forecast_day,
                             t.date_local::text,
                             t.tci,
+                            t.cid,
+                            t.cia,
+                            t.r   AS tci_r,
+                            t.s   AS tci_s,
+                            t.w   AS tci_w,
                             h.hci,
+                            h.et,
+                            h.tc,
+                            h.a,
+                            h.r   AS hci_r,
+                            h.w   AS hci_w,
                             t.run_id,
                             fr.run_date::text,
                             fr.cycle
@@ -226,54 +250,63 @@ def api_gfs_series():
                                              AND h.mo_id        = t.mo_id
                                              AND h.forecast_day = t.forecast_day
                     WHERE   t.run_id = (SELECT MAX(run_id) FROM tci_mo_daily)
-                    ORDER   BY t.mo_id, t.forecast_day
-                """)
+                      AND   m.name = %s
+                    ORDER   BY t.forecast_day
+                """, (mo,))
                 rows = cur.fetchall()
 
         if not rows:
-            return jsonify({
-                "run_id": None, "run_date": None, "cycle": None,
-                "days": [], "data": []
-            })
+            return jsonify(empty)
 
-        # Метаданные прогона (одинаковы для всех строк)
-        run_id    = rows[0][6]
-        run_date  = rows[0][7]
-        cycle     = rows[0][8]
+        def rnd(x):
+            return round(float(x), 1) if x is not None else None
 
-        # Группировка: МО -> временной ряд по дням; параллельно собираем список дней
-        mo_map   = {}
-        mo_order = []
-        days_map = {}
+        # Метаданные прогона + идентификация МО (одинаковы для всех строк)
+        mo_id    = rows[0][0]
+        name     = rows[0][1]
+        run_id   = rows[0][16]
+        run_date = rows[0][17]
+        cycle    = rows[0][18]
 
+        # Временной ряд по дням
+        series = []
         for r in rows:
-            mo_id, name, fday, date_local, tci, hci = r[0], r[1], r[2], r[3], r[4], r[5]
+            (_, _, fday, date_local, tci, cid, cia, tci_r, tci_s, tci_w,
+             hci, et, tc, a, hci_r, hci_w, _, _, _) = r
 
-            if mo_id not in mo_map:
-                mo_map[mo_id] = {"mo_id": mo_id, "name": name, "series": []}
-                mo_order.append(mo_id)
-
-            mo_map[mo_id]["series"].append({
+            series.append({
                 "forecast_day": fday,
                 "date_local":   date_local,
-                "tci":          round(float(tci), 1) if tci is not None else None,
-                "hci":          round(float(hci), 1) if hci is not None else None,
+                "tci":          rnd(tci),
+                "hci":          rnd(hci),
+                "tci_parts": {
+                    "cid": rnd(cid),
+                    "cia": rnd(cia),
+                    "r":   rnd(tci_r),
+                    "s":   rnd(tci_s),
+                    "w":   rnd(tci_w),
+                },
+                "hci_parts": {
+                    "et": rnd(et),
+                    "tc": rnd(tc),
+                    "a":  rnd(a),
+                    "r":  rnd(hci_r),
+                    "w":  rnd(hci_w),
+                },
             })
 
-            if fday not in days_map:
-                days_map[fday] = date_local
-
-        days = [{"day": d, "date": days_map[d]} for d in sorted(days_map)]
-        data = [mo_map[mo_id] for mo_id in mo_order]
+        days = [{"day": s["forecast_day"], "date": s["date_local"]} for s in series]
 
         return jsonify({
             "run_id":   run_id,
             "run_date": run_date,
             "cycle":    cycle,
+            "mo_id":    mo_id,
+            "name":     name,
             "days":     days,
-            "data":     data,
+            "series":   series,
         })
 
     except Exception as e:
         traceback.print_exc()
-        return jsonify({"error": str(e), "data": []}), 500
+        return jsonify({"error": str(e), "series": []}), 500

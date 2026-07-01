@@ -1,5 +1,3 @@
-let seriesData = [];
-
 const RU_MONTHS_LINEAR = ['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
 
 // Контейнеры графиков: своя страница — свой график (TCI / HCI)
@@ -8,43 +6,57 @@ const LINEAR_TARGETS = ['linear-gfs', 'linear-hci'];
 const COLOR_TCI = '#16a34a';   // зелёный — TCI
 const COLOR_HCI = '#2563eb';   // синий   — HCI
 
-(async () => {
+// Кэш ответов /api/gfs/series по имени МО (эндпоинт теперь отдаёт один МО),
+// чтобы не запрашивать заново при повторном клике по тому же району.
+const seriesCache = new Map();
+
+(function init() {
   if (typeof Plotly === 'undefined') {
     LINEAR_TARGETS.forEach(id => showErrorLinear('Не удалось загрузить библиотеку Plotly', id));
     return;
   }
-  try {
-    const res = await fetch('/api/gfs/series').then(r => r.json());
-    if (res.error) {
-      LINEAR_TARGETS.forEach(id => showErrorLinear('Ошибка данных: ' + res.error, id));
-      return;
-    }
-
-    seriesData = Array.isArray(res.data) ? res.data : [];
-    if (!seriesData.length) {
-      LINEAR_TARGETS.forEach(id => showErrorLinear('В базе нет данных прогноза', id));
-      return;
-    }
-
-    // По умолчанию район не выбираем — ждём клик по МО на карте
-    LINEAR_TARGETS.forEach(id => promptLinear(id));
-  } catch (e) {
-    LINEAR_TARGETS.forEach(id => showErrorLinear('Сетевая ошибка: ' + e.message, id));
-  }
+  // Данные подтягиваются по клику на МО — ждём выбор района на карте
+  LINEAR_TARGETS.forEach(id => promptLinear(id));
 })();
 
 // Вызывается из map_gfs.js по клику на МО: selectMo(name, 'linear-gfs' | 'linear-hci')
-export function selectMo(moName, linearId = 'linear-gfs') {
-  const mo = seriesData.find(m => m.name === moName);
-  if (!mo) return showErrorLinear('МО не найдено', linearId);
-  drawChart(mo, linearId);
-  addChartTitle(mo, linearId);
+export async function selectMo(moName, linearId = 'linear-gfs') {
+  // Из кэша — мгновенно
+  if (seriesCache.has(moName)) {
+    const cached = seriesCache.get(moName);
+    drawChart(cached, linearId);
+    addChartTitle(cached, linearId);
+    return;
+  }
+
+  // Заглушку-«Загрузка» показываем только до первой отрисовки графика;
+  // при повторных кликах оставляем прежний график, пока не придут данные
+  const el = document.getElementById(linearId);
+  if (el && !el.classList.contains('js-plotly-plot')) {
+    el.innerHTML = '<div class="placeholder">Загрузка…</div>';
+  }
+
+  let res;
+  try {
+    res = await fetch(`/api/gfs/series?mo=${encodeURIComponent(moName)}`).then(r => r.json());
+  } catch (e) {
+    return showErrorLinear('Сетевая ошибка: ' + e.message, linearId);
+  }
+
+  if (res.error) return showErrorLinear('Ошибка данных: ' + res.error, linearId);
+  if (!Array.isArray(res.series) || !res.series.length) {
+    return showErrorLinear(`Нет данных по дням для «${moName}»`, linearId);
+  }
+
+  seriesCache.set(moName, res);
+  drawChart(res, linearId);
+  addChartTitle(res, linearId);
 }
 
 function addChartTitle(mo, linearId) {
   const container = document.getElementById(linearId);
   const titleEl = container.parentElement.querySelector('.linear-title');
-  titleEl.innerHTML = `<span class="mo-name">${mo.name}</span>`;
+  if (titleEl) titleEl.innerHTML = `<span class="mo-name">${mo.name}</span>`;
 }
 
 function drawChart(mo, linearId) {
